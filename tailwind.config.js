@@ -7,6 +7,11 @@ export default {
   theme: {
     fontSize: {
       xs: "0.4rem",
+      sm: "0.8rem",
+      base: "0.925rem",
+      lg: "1.05rem",
+      xl: "1.25rem",
+      "2xl": "1.5rem",
     },
     extend: {
       fontFamily: {

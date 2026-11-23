@@ -19,7 +19,8 @@ import {
   connect as tauri_serial_connect,
   list_devices as serial_list_devices,
 } from "./tauri/serial";
-import Keyboard from "./keyboard/Keyboard";
+import { GremlinProvider, useGremlin } from "./gremlin/GremlinContext";
+import { GremlinWorkspace } from "./gremlin/GremlinWorkspace";
 import { UndoRedoContext, useUndoRedo } from "./undoRedo";
 import { usePub, useSub } from "./usePubSub";
 import { LockState } from "@zmkfirmware/zmk-studio-ts-client/core";
@@ -160,6 +161,186 @@ async function connect(
   setConn({ conn });
 }
 
+function AppInner({
+  connectedDeviceName,
+  canUndo,
+  canRedo,
+  undo,
+  redo,
+  reset,
+  setConn,
+  setConnectedDeviceName,
+  connectionAbort,
+  setConnectionAbort,
+  showAbout,
+  setShowAbout,
+  showLicenseNotice,
+  setShowLicenseNotice,
+  conn,
+}: {
+  connectedDeviceName?: string;
+  canUndo: boolean;
+  canRedo: boolean;
+  undo: () => Promise<void>;
+  redo: () => Promise<void>;
+  reset: () => void;
+  setConn: Dispatch<ConnectionState>;
+  setConnectedDeviceName: Dispatch<string | undefined>;
+  connectionAbort: AbortController;
+  setConnectionAbort: Dispatch<AbortController>;
+  showAbout: boolean;
+  setShowAbout: Dispatch<boolean>;
+  showLicenseNotice: boolean;
+  setShowLicenseNotice: Dispatch<boolean>;
+  conn: ConnectionState;
+}) {
+  const {
+    capabilities,
+    gremlinUnsaved,
+    saveAllGremlinToFlash,
+    loadSleepAndDisplay,
+    loadStick,
+    loadCombos,
+    loadBehaviors,
+    refreshCapabilities,
+  } = useGremlin();
+
+  const save = useCallback(() => {
+    async function doSave() {
+      if (!conn.conn) {
+        return;
+      }
+
+      let resp = await call_rpc(conn.conn, { keymap: { saveChanges: true } });
+      if (!resp.keymap?.saveChanges || resp.keymap?.saveChanges.err) {
+        console.error("Failed to save changes", resp.keymap?.saveChanges);
+      }
+
+      if (capabilities) {
+        await saveAllGremlinToFlash();
+      }
+    }
+
+    doSave();
+  }, [conn, capabilities, saveAllGremlinToFlash]);
+
+  const discard = useCallback(() => {
+    async function doDiscard() {
+      if (!conn.conn) {
+        return;
+      }
+
+      let resp = await call_rpc(conn.conn, {
+        keymap: { discardChanges: true },
+      });
+      if (!resp.keymap?.discardChanges) {
+        console.error("Failed to discard changes", resp);
+      }
+
+      reset();
+      setConn({ conn: conn.conn });
+    }
+
+    doDiscard();
+  }, [conn]);
+
+  const resetSettings = useCallback(() => {
+    async function doReset() {
+      if (!conn.conn) {
+        return;
+      }
+
+      let resp = await call_rpc(conn.conn, {
+        core: { resetSettings: true },
+      });
+      if (!resp.core?.resetSettings) {
+        console.error("Failed to settings reset", resp);
+      }
+
+      if (capabilities) {
+        await Promise.all([
+          loadSleepAndDisplay(),
+          loadStick(),
+          loadCombos(),
+          loadBehaviors(),
+          refreshCapabilities(),
+        ]);
+      }
+
+      reset();
+      setConn({ conn: conn.conn });
+    }
+
+    doReset();
+  }, [
+    conn,
+    capabilities,
+    loadSleepAndDisplay,
+    loadStick,
+    loadCombos,
+    loadBehaviors,
+    refreshCapabilities,
+  ]);
+
+  const disconnect = useCallback(() => {
+    async function doDisconnect() {
+      if (!conn.conn) {
+        return;
+      }
+
+      await conn.conn.request_writable.close();
+      connectionAbort.abort("User disconnected");
+      setConnectionAbort(new AbortController());
+    }
+
+    doDisconnect();
+  }, [conn]);
+
+  const onConnect = useCallback(
+    (t: RpcTransport) => {
+      const ac = new AbortController();
+      setConnectionAbort(ac);
+      connect(t, setConn, setConnectedDeviceName, ac.signal);
+    },
+    [setConn, setConnectedDeviceName]
+  );
+
+  return (
+    <>
+      <UnlockModal />
+      <ConnectModal
+        open={!conn.conn}
+        transports={TRANSPORTS}
+        onTransportCreated={onConnect}
+      />
+      <AboutModal open={showAbout} onClose={() => setShowAbout(false)} />
+      <LicenseNoticeModal
+        open={showLicenseNotice}
+        onClose={() => setShowLicenseNotice(false)}
+      />
+      <div className="bg-base-100 text-base-content h-full max-h-[100vh] w-full max-w-[100vw] inline-grid grid-cols-[1fr] grid-rows-[auto_1fr_auto] overflow-hidden">
+        <AppHeader
+          connectedDeviceLabel={connectedDeviceName}
+          canUndo={canUndo}
+          canRedo={canRedo}
+          extraUnsaved={gremlinUnsaved}
+          onUndo={undo}
+          onRedo={redo}
+          onSave={save}
+          onDiscard={discard}
+          onDisconnect={disconnect}
+          onResetSettings={resetSettings}
+        />
+        <GremlinWorkspace />
+        <AppFooter
+          onShowAbout={() => setShowAbout(true)}
+          onShowLicenseNotice={() => setShowLicenseNotice(true)}
+        />
+      </div>
+    </>
+  );
+}
+
 function App() {
   const [conn, setConn] = useState<ConnectionState>({ conn: null });
   const [connectedDeviceName, setConnectedDeviceName] = useState<
@@ -202,117 +383,29 @@ function App() {
     updateLockState();
   }, [conn, setLockState]);
 
-  const save = useCallback(() => {
-    async function doSave() {
-      if (!conn.conn) {
-        return;
-      }
-
-      let resp = await call_rpc(conn.conn, { keymap: { saveChanges: true } });
-      if (!resp.keymap?.saveChanges || resp.keymap?.saveChanges.err) {
-        console.error("Failed to save changes", resp.keymap?.saveChanges);
-      }
-    }
-
-    doSave();
-  }, [conn]);
-
-  const discard = useCallback(() => {
-    async function doDiscard() {
-      if (!conn.conn) {
-        return;
-      }
-
-      let resp = await call_rpc(conn.conn, {
-        keymap: { discardChanges: true },
-      });
-      if (!resp.keymap?.discardChanges) {
-        console.error("Failed to discard changes", resp);
-      }
-
-      reset();
-      setConn({ conn: conn.conn });
-    }
-
-    doDiscard();
-  }, [conn]);
-
-  const resetSettings = useCallback(() => {
-    async function doReset() {
-      if (!conn.conn) {
-        return;
-      }
-
-      let resp = await call_rpc(conn.conn, {
-        core: { resetSettings: true },
-      });
-      if (!resp.core?.resetSettings) {
-        console.error("Failed to settings reset", resp);
-      }
-
-      reset();
-      setConn({ conn: conn.conn });
-    }
-
-    doReset();
-  }, [conn]);
-
-  const disconnect = useCallback(() => {
-    async function doDisconnect() {
-      if (!conn.conn) {
-        return;
-      }
-
-      await conn.conn.request_writable.close();
-      connectionAbort.abort("User disconnected");
-      setConnectionAbort(new AbortController());
-    }
-
-    doDisconnect();
-  }, [conn]);
-
-  const onConnect = useCallback(
-    (t: RpcTransport) => {
-      const ac = new AbortController();
-      setConnectionAbort(ac);
-      connect(t, setConn, setConnectedDeviceName, ac.signal);
-    },
-    [setConn, setConnectedDeviceName, setConnectedDeviceName]
-  );
-
   return (
     <ConnectionContext.Provider value={conn}>
       <LockStateContext.Provider value={lockState}>
         <UndoRedoContext.Provider value={doIt}>
-          <UnlockModal />
-          <ConnectModal
-            open={!conn.conn}
-            transports={TRANSPORTS}
-            onTransportCreated={onConnect}
-          />
-          <AboutModal open={showAbout} onClose={() => setShowAbout(false)} />
-          <LicenseNoticeModal
-            open={showLicenseNotice}
-            onClose={() => setShowLicenseNotice(false)}
-          />
-          <div className="bg-base-100 text-base-content h-full max-h-[100vh] w-full max-w-[100vw] inline-grid grid-cols-[auto] grid-rows-[auto_1fr_auto] overflow-hidden">
-            <AppHeader
-              connectedDeviceLabel={connectedDeviceName}
+          <GremlinProvider>
+            <AppInner
+              connectedDeviceName={connectedDeviceName}
               canUndo={canUndo}
               canRedo={canRedo}
-              onUndo={undo}
-              onRedo={redo}
-              onSave={save}
-              onDiscard={discard}
-              onDisconnect={disconnect}
-              onResetSettings={resetSettings}
+              undo={undo}
+              redo={redo}
+              reset={reset}
+              setConn={setConn}
+              setConnectedDeviceName={setConnectedDeviceName}
+              connectionAbort={connectionAbort}
+              setConnectionAbort={setConnectionAbort}
+              showAbout={showAbout}
+              setShowAbout={setShowAbout}
+              showLicenseNotice={showLicenseNotice}
+              setShowLicenseNotice={setShowLicenseNotice}
+              conn={conn}
             />
-            <Keyboard />
-            <AppFooter
-              onShowAbout={() => setShowAbout(true)}
-              onShowLicenseNotice={() => setShowLicenseNotice(true)}
-            />
-          </div>
+          </GremlinProvider>
         </UndoRedoContext.Provider>
       </LockStateContext.Provider>
     </ConnectionContext.Provider>

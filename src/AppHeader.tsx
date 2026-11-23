@@ -26,12 +26,14 @@ export interface AppHeaderProps {
   onDisconnect?: () => void | Promise<void>;
   canUndo?: boolean;
   canRedo?: boolean;
+  extraUnsaved?: boolean;
 }
 
 export const AppHeader = ({
   connectedDeviceLabel,
   canRedo,
   canUndo,
+  extraUnsaved,
   onRedo,
   onUndo,
   onSave,
@@ -66,9 +68,9 @@ export const AppHeader = ({
 
   return (
     <header className="top-0 left-0 right-0 grid grid-cols-[1fr_auto_1fr] items-center justify-between h-10 max-w-full">
-      <div className="flex px-3 items-center gap-1">
-        <img src="/zmk.svg" alt="ZMK Logo" className="h-8 rounded" />
-        <p>Studio</p>
+      <div className="flex px-3 items-center gap-1.5">
+        <img src="/zmk.svg" alt="Gremlin Studio Logo" className="h-7 rounded" />
+        <p className="font-semibold">Gremlin Studio</p>
       </div>
       <GenericModal ref={showSettingsRef} className="max-w-[50vw]">
         <h2 className="my-2 text-lg">Restore Stock Settings</h2>
@@ -149,7 +151,7 @@ export const AppHeader = ({
         <Tooltip label="Save">
           <Button
             className="flex items-center justify-center p-1.5 rounded enabled:hover:bg-base-300 disabled:opacity-50"
-            isDisabled={!unsaved}
+            isDisabled={!unsaved && !extraUnsaved}
             onPress={onSave}
           >
             <Save className="inline-block w-4 mx-1" aria-label="Save" />

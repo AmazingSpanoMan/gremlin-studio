@@ -25,6 +25,12 @@ const shortenHeader = (header: string | undefined) => {
   // So we use an undefined check here
   if(typeof shortNames[header]?.short !== "undefined"){
     return shortNames[header].short;
+  } else if(header.startsWith("Gremlin Hold ")) {
+    return "Hold " + header.slice("Gremlin Hold ".length);
+  } else if(header.startsWith("Gremlin TapDance ")) {
+    return "TD " + header.slice("Gremlin TapDance ".length);
+  } else if(header.startsWith("Gremlin Macro ")) {
+    return "Mac " + header.slice("Gremlin Macro ".length);
   } else if(header.length > MAX_HEADER_LENGTH){
     const words = header.split(/[\s,-]+/);
     const lettersPerWord = Math.trunc(MAX_HEADER_LENGTH / words.length);

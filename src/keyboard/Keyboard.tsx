@@ -31,6 +31,7 @@ import { LockStateContext } from "../rpc/LockStateContext";
 import { LockState } from "@zmkfirmware/zmk-studio-ts-client/core";
 import { deserializeLayoutZoom, LayoutZoom } from "./PhysicalLayout";
 import { useLocalStorageState } from "../misc/useLocalStorageState";
+import { useGremlin } from "../gremlin/GremlinContext";
 
 type BehaviorMap = Record<number, GetBehaviorDetailsResponse>;
 
@@ -186,6 +187,16 @@ export default function Keyboard() {
 
   const conn = useContext(ConnectionContext);
   const undoRedo = useContext(UndoRedoContext);
+  const { setSharedDevice } = useGremlin();
+
+  useEffect(() => {
+    setSharedDevice({
+      layouts,
+      selectedPhysicalLayoutIndex,
+      keymap,
+      behaviors,
+    });
+  }, [layouts, selectedPhysicalLayoutIndex, keymap, behaviors, setSharedDevice]);
 
   useEffect(() => {
     setSelectedLayerIndex(0);

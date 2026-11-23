@@ -6,10 +6,10 @@
     "devUrl": "http://localhost:5173",
     "frontendDist": "../dist/"
   },
-  "productName": "ZMK Studio",
-  "mainBinaryName": "zmk-studio",
-  "version": "0.3.1",
-  "identifier": "dev.zmk.studio",
+  "productName": "Gremlin Studio",
+  "mainBinaryName": "gremlin-studio",
+  "version": "0.4.0",
+  "identifier": "com.gremlin.studio",
   "bundle": {
     "active": true,
     "category": "Productivity",
@@ -27,7 +27,7 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ],
-    "longDescription": "",
+    "longDescription": "Gremlin Studio — Full hardware & firmware configurator for Gremlin v3",
     "macOS": {
       "entitlements": null,
       "exceptionDomain": "",
@@ -36,15 +36,12 @@
       "signingIdentity": "-"
     },
     "resources": [],
-    "shortDescription": "",
-    "targets": "all",
-    "windows": {
-      "signCommand": "signtool.exe sign /v /debug /fd SHA256 /tr http://timestamp.acs.microsoft.com /td SHA256 /dlib ..\\Microsoft.Trusted.Signing.Client\\bin\\x64\\Azure.CodeSigning.Dlib.dll /dmdf trusted-signing-metadata.json %1"
-    }
+    "shortDescription": "Gremlin v3 Configurator",
+    "targets": "all"
   },
   "plugins": {
     "cli": {
-      "description": "Tauri CLI Plugin Example",
+      "description": "Gremlin Studio CLI",
       "args": [
         {
           "name": "serial-port",
@@ -67,10 +64,10 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 600,
+        "height": 780,
         "resizable": true,
-        "title": "ZMK Studio",
-        "width": 800
+        "title": "Gremlin Studio",
+        "width": 1220
       }
     ]
   }
