@@ -68,12 +68,12 @@ export const GremlinWorkspace = () => {
 
         <div className="flex items-center gap-2 text-sm">
           {gremlinUnsaved && (
-            <span className="px-2 py-0.5 rounded bg-yellow-500/20 text-yellow-600 dark:text-yellow-300 font-medium">
+            <span className="px-2 py-0.5 rounded bg-accent/20 text-accent border border-accent/40 font-medium">
               Unsaved RAM Changes
             </span>
           )}
-          <span className="px-2 py-0.5 rounded bg-base-100 opacity-80">
-            Gremlin v3 Proto v{capabilities.protocolVersion}
+          <span className="px-2 py-0.5 rounded bg-base-100 border border-[#233a29] text-accent">
+            Gremlin v3 · Proto v{capabilities.protocolVersion}
           </span>
         </div>
       </nav>

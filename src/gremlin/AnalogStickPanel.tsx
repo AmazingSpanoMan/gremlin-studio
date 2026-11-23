@@ -323,7 +323,7 @@ export const AnalogStickPanel = ({ isActiveTab }: { isActiveTab: boolean }) => {
                   />
                 );
               })}
-            <circle cx={normPx} cy={normPy} r={8} fill="#7c3aed" stroke="#ffffff" strokeWidth={2} />
+            <circle cx={normPx} cy={normPy} r={8} fill="#22c55e" stroke="#facc15" strokeWidth={2.5} />
           </svg>
 
           <div className="w-full grid grid-cols-2 gap-2 text-sm bg-base-200 p-2.5 rounded">
@@ -439,7 +439,7 @@ export const AnalogStickPanel = ({ isActiveTab }: { isActiveTab: boolean }) => {
                 Step 3 of 3: Calibration Applied Live — Verify Movement &amp; Deadzone
               </div>
               <div className="text-sm">
-                Move the stick in circles and release to confirm the violet dot centers cleanly inside
+                Move the stick in circles and release to confirm the green dot centers cleanly inside
                 the yellow deadzone ring.
               </div>
               <div className="flex gap-2">

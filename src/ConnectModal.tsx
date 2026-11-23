@@ -283,8 +283,20 @@ export const ConnectModal = ({
   const haveTransports = useMemo(() => transports.length > 0, [transports]);
 
   return (
-    <GenericModal ref={dialog} className="max-w-xl">
-      <h1 className="text-xl">Welcome to ZMK Studio</h1>
+    <GenericModal ref={dialog} className="max-w-xl border border-[#243b2a] shadow-2xl">
+      <div className="flex flex-col items-center text-center mb-4">
+        <img
+          src="/gremlin-logo.svg"
+          alt="Gremlin v3 Logo"
+          className="w-24 h-24 rounded-2xl shadow-lg shadow-primary/20"
+        />
+        <div className="mt-2 text-lg font-extrabold tracking-wider text-accent">
+          Gremlin <span className="text-primary">v3</span>
+        </div>
+        <h1 className="text-xl font-bold mt-1 text-base-content">
+          Welcome to Gremlin Studio
+        </h1>
+      </div>
       {haveTransports
         ? connectOptions(transports, onTransportCreated, open)
         : noTransportsOptionsPrompt()}

@@ -89,7 +89,7 @@ const EditLabelModal = ({
           Cancel
         </button>
         <button
-          className="py-1.5 px-2 ml-4 rounded-md bg-gray-100 text-black hover:bg-gray-300"
+          className="py-1.5 px-2 ml-4 rounded-md bg-primary text-primary-content font-medium hover:opacity-90"
           type="button"
           onClick={() => {
             handleSave();

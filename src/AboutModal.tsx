@@ -180,20 +180,31 @@ export const AboutModal = ({ open, onClose }: AboutModalProps) => {
 
   return (
     <GenericModal ref={ref} className="min-w-min w-[70vw]" onClose={onClose}>
-      <div className="flex justify-between items-start">
-        <p>
-          The ZMK Project:{" "}
-          <ExternalLink href="https://zmk.dev/">website</ExternalLink>,{" "}
-          <ExternalLink href="https://github.com/zmkfirmware/zmk/issues/">
-            GitHub Issues
-          </ExternalLink>
-          ,{" "}
-          <ExternalLink href="https://zmk.dev/community/discord/invite">
-            Discord Server
-          </ExternalLink>
-        </p>
+      <div className="flex justify-between items-start gap-4 mb-3">
+        <div className="flex items-center gap-3">
+          <div className="flex flex-col items-center">
+            <img src="/gremlin-logo.svg" alt="Gremlin v3 Logo" className="h-12 w-12 rounded-lg" />
+            <span className="text-[10px] font-extrabold text-accent mt-0.5">
+              Gremlin <span className="text-primary">v3</span>
+            </span>
+          </div>
+          <div>
+            <div className="text-lg font-bold">Gremlin Studio</div>
+            <p className="text-sm opacity-85">
+              Built on The ZMK Project:{" "}
+              <ExternalLink href="https://zmk.dev/">website</ExternalLink>,{" "}
+              <ExternalLink href="https://github.com/zmkfirmware/zmk/issues/">
+                GitHub Issues
+              </ExternalLink>
+              ,{" "}
+              <ExternalLink href="https://zmk.dev/community/discord/invite">
+                Discord Server
+              </ExternalLink>
+            </p>
+          </div>
+        </div>
         <button
-          className="p-1.5 rounded-md bg-gray-100 text-black hover:bg-gray-300"
+          className="px-3 py-1.5 rounded-md bg-primary text-primary-content font-medium hover:opacity-90"
           onClick={onClose}
         >
           Close
@@ -231,16 +242,7 @@ export const AboutModal = ({ open, onClose }: AboutModalProps) => {
 
                   return (
                     <a key={v.name} href={v.url} target="_blank">
-                      <picture aria-label={v.name}>
-                        {v.darkModeImg && (
-                          <source
-                            className={maxSizeVariants[s.size]}
-                            srcSet={v.darkModeImg}
-                            media="(prefers-color-scheme: dark)"
-                          />
-                        )}
-                        <img className={maxSizeVariants[s.size]} src={v.img} />
-                      </picture>
+                        <img className={maxSizeVariants[s.size]} src={v.darkModeImg || v.img} />
                     </a>
                   );
                 })}

@@ -67,10 +67,22 @@ export const AppHeader = ({
   );
 
   return (
-    <header className="top-0 left-0 right-0 grid grid-cols-[1fr_auto_1fr] items-center justify-between h-10 max-w-full">
-      <div className="flex px-3 items-center gap-1.5">
-        <img src="/zmk.svg" alt="Gremlin Studio Logo" className="h-7 rounded" />
-        <p className="font-semibold">Gremlin Studio</p>
+    <header className="top-0 left-0 right-0 grid grid-cols-[1fr_auto_1fr] items-center justify-between h-12 px-2 bg-base-200 border-b border-[#1f3325] max-w-full">
+      <div className="flex px-2 items-center gap-2.5">
+        <div className="flex flex-col items-center justify-center leading-none">
+          <img
+            src="/gremlin-logo.svg"
+            alt="Gremlin v3 Head Logo"
+            className="h-7 w-7 rounded"
+          />
+          <span className="text-[9px] font-extrabold tracking-wider text-accent mt-0.5">
+            Gremlin <span className="text-primary">v3</span>
+          </span>
+        </div>
+        <div className="h-6 w-px bg-[#243b2a]" />
+        <p className="font-semibold text-base tracking-wide text-base-content">
+          Gremlin <span className="text-primary">Studio</span>
+        </p>
       </div>
       <GenericModal ref={showSettingsRef} className="max-w-[50vw]">
         <h2 className="my-2 text-lg">Restore Stock Settings</h2>

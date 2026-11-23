@@ -11,7 +11,7 @@ export const GenericModal = React.forwardRef(({ onClose, children, className }: 
     <dialog
       ref={ref}
       onClose={onClose}
-      className={`p-5 rounded-lg bg-base-100 text-base-content backdrop:bg-[rgba(0,0,0,0.5)] ${className}`}
+      className={`p-5 rounded-lg bg-base-100 text-base-content border border-[#243b2a] shadow-2xl backdrop:bg-[rgba(0,0,0,0.7)] ${className}`}
     >
       {children}
     </dialog>

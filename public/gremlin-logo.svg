@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="bgGrad" x1="64" y1="32" x2="448" y2="480" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0d1710"/>
+      <stop offset="100%" stop-color="#050806"/>
+    </linearGradient>
+    <linearGradient id="headGrad" x1="256" y1="90" x2="256" y2="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#4ade80"/>
+      <stop offset="48%" stop-color="#22c55e"/>
+      <stop offset="100%" stop-color="#14532d"/>
+    </linearGradient>
+    <linearGradient id="earInner" x1="256" y1="120" x2="256" y2="260" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#facc15"/>
+      <stop offset="100%" stop-color="#ca8a04"/>
+    </linearGradient>
+    <linearGradient id="eyeGlow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="55%" stop-color="#facc15"/>
+      <stop offset="100%" stop-color="#eab308"/>
+    </linearGradient>
+    <linearGradient id="frameGrad" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#22c55e"/>
+      <stop offset="50%" stop-color="#facc15"/>
+      <stop offset="100%" stop-color="#22c55e"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Obsidian Rounded Badge -->
+  <rect x="16" y="16" width="480" height="480" rx="96" fill="url(#bgGrad)" stroke="url(#frameGrad)" stroke-width="14"/>
+  <rect x="34" y="34" width="444" height="444" rx="80" fill="none" stroke="#1f3b26" stroke-width="4"/>
+
+  <!-- Left & Right Pointed Gremlin Ears (Outer) -->
+  <path d="M168 188 L48 112 L74 188 L56 226 L138 256 Z" fill="#16a34a" stroke="#052e16" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M344 188 L464 112 L438 188 L456 226 L374 256 Z" fill="#16a34a" stroke="#052e16" stroke-width="8" stroke-linejoin="round"/>
+
+  <!-- Inner Ear Yellow/Gold Accents -->
+  <path d="M150 202 L82 152 L98 200 L88 220 L138 238 Z" fill="url(#earInner)" opacity="0.92"/>
+  <path d="M362 202 L430 152 L414 200 L424 220 L374 238 Z" fill="url(#earInner)" opacity="0.92"/>
+
+  <!-- Main Angular Gremlin Skull / Head -->
+  <path d="M256 96
+           L318 114
+           L364 176
+           L382 254
+           L358 334
+           L302 396
+           L256 416
+           L210 396
+           L154 334
+           L130 254
+           L148 176
+           L194 114 Z"
+        fill="url(#headGrad)" stroke="#041f0d" stroke-width="10" stroke-linejoin="round"/>
+
+  <!-- Top Brow Horns / Mohawk Ridges -->
+  <path d="M256 76 L278 136 L256 154 L234 136 Z" fill="#facc15" stroke="#041f0d" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M204 112 L226 156 L192 162 Z" fill="#15803d"/>
+  <path d="M308 112 L286 156 L320 162 Z" fill="#15803d"/>
+
+  <!-- Dark Recessed Face Mask Around Eyes -->
+  <path d="M156 218 L234 242 L256 224 L278 242 L356 218 L348 286 L284 304 L256 292 L228 304 L164 286 Z"
+        fill="#07130b" stroke="#041f0d" stroke-width="6" stroke-linejoin="round"/>
+
+  <!-- Fierce Slanted Glowing Yellow Eyes -->
+  <path d="M170 232 L238 258 L224 286 L176 266 Z" fill="url(#eyeGlow)"/>
+  <path d="M342 232 L274 258 L288 286 L336 266 Z" fill="url(#eyeGlow)"/>
+
+  <!-- Sharp Vertical Pupils & Highlight Dots -->
+  <ellipse cx="206" cy="260" rx="6" ry="15" transform="rotate(-14 206 260)" fill="#070b08"/>
+  <ellipse cx="306" cy="260" rx="6" ry="15" transform="rotate(14 306 260)" fill="#070b08"/>
+  <circle cx="196" cy="252" r="4" fill="#ffffff"/>
+  <circle cx="296" cy="252" r="4" fill="#ffffff"/>
+
+  <!-- Cheek Armor Contours -->
+  <path d="M148 294 L188 326 L170 344 Z" fill="#14532d" opacity="0.85"/>
+  <path d="M364 294 L324 326 L342 344 Z" fill="#14532d" opacity="0.85"/>
+
+  <!-- Nose Ridge -->
+  <path d="M244 288 L256 276 L268 288 L262 312 L256 318 L250 312 Z" fill="#06140b"/>
+
+  <!-- Jagged Gremlin Grin (Mouth Cavity + Sharp Yellow Fangs) -->
+  <path d="M178 332 Q256 364 334 332 L316 376 Q256 400 196 376 Z" fill="#060c08" stroke="#041f0d" stroke-width="6" stroke-linejoin="round"/>
+  <!-- Upper & Lower Fangs -->
+  <path d="M194 340 L206 364 L218 346 L232 362 L244 348 L256 362 L268 348 L280 362 L294 346 L306 364 L318 340"
+        fill="#facc15" stroke="#060c08" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M208 378 L220 358 L234 380 L256 364 L278 380 L292 358 L304 378"
+        fill="#fde047" stroke="#060c08" stroke-width="3" stroke-linejoin="round"/>
+</svg>
