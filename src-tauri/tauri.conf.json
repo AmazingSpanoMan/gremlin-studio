@@ -8,7 +8,7 @@
   },
   "productName": "Gremlin Studio",
   "mainBinaryName": "gremlin-studio",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "identifier": "com.gremlin.studio",
   "bundle": {
     "active": true,
@@ -37,7 +37,18 @@
     },
     "resources": [],
     "shortDescription": "Gremlin v3 Configurator",
-    "targets": "all"
+    "targets": "all",
+    "windows": {
+      "allowDowngrades": false,
+      "wix": {
+        "upgradeCode": "f8c635f2-df15-50f5-8d5c-b49b7e07635e"
+      },
+      "nsis": {
+        "installMode": "currentUser",
+        "installerIcon": "icons/icon.ico",
+        "installerHooks": "windows/hooks.nsh"
+      }
+    }
   },
   "plugins": {
     "cli": {

@@ -38,6 +38,30 @@ jobs:
       - name: install frontend dependencies
         run: npm install
 
+      - name: bump build version for clean Windows upgrades
+        shell: pwsh
+        run: |
+          $tagName = "${{ github.ref_name }}"
+          if ("${{ github.ref_type }}" -eq "tag" -and $tagName -match '^v?(\d+\.\d+\.\d+)$') {
+            $env:GREMLIN_BUILD_VER = $Matches[1]
+          } else {
+            $patch = 100 + [int]${{ github.run_number }}
+            $env:GREMLIN_BUILD_VER = "0.4.$patch"
+          }
+          node -e '
+            const fs = require("fs");
+            const ver = process.env.GREMLIN_BUILD_VER;
+            for (const p of ["package.json", "src-tauri/tauri.conf.json"]) {
+              const j = JSON.parse(fs.readFileSync(p, "utf8"));
+              j.version = ver;
+              fs.writeFileSync(p, JSON.stringify(j, null, 2) + "\n", "utf8");
+            }
+            let cargo = fs.readFileSync("src-tauri/Cargo.toml", "utf8");
+            cargo = cargo.replace(/^version\s*=\s*"[^"]+"/m, `version = "${ver}"`);
+            fs.writeFileSync("src-tauri/Cargo.toml", cargo, "utf8");
+            console.log("Set build version:", ver);
+          '
+
       - uses: tauri-apps/tauri-action@v0
         name: build
         env:
